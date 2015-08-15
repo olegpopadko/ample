@@ -24,7 +24,7 @@ class Line
     /**
      * @var File
      *
-     * @ORM\ManyToOne(targetEntity="File")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\File")
      * @ORM\JoinColumn(name="file_id", referencedColumnName="id")
      */
     private $file;
