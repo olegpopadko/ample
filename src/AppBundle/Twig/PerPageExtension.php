@@ -43,10 +43,11 @@ class PerPageExtension extends \Twig_Extension
     /**
      *
      */
-    public function createPerPageFormView(\Twig_Environment $twig)
+    public function createPerPageFormView(\Twig_Environment $twig, $style = '')
     {
         return $twig->render('AppBundle:PerPage:index.html.twig', [
             'per_page_form' => $this->perPage->createPerPageForm()->createView(),
+            'style'         => $style,
         ]);
     }
 

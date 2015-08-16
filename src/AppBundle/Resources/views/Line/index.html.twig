@@ -1,29 +1,56 @@
 {% extends '::base.html.twig' %}
 
+{% block title %}Line list{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .show-grid, #date-range-list li {
+            margin-bottom: 15px;
+        }
+
+        #date-range-list {
+            padding-left: 0px;
+            list-style-type: none;
+        }
+    </style>
+{% endblock %}
+
 {% block body -%}
     <h1>Line list</h1>
 
-    <nav class="navbar navbar-default" role="navigation">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle"
-                    data-toggle="collapse" data-target=".navbar-search-collapse">
-                <span class="sr-only">Toggle settings</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-        </div>
+    <div class="show-grid">
+        {{ per_page_form() }}
+    </div>
 
-        <div class="collapse navbar-collapse navbar-search-collapse">
-            {{ per_page_form() }}
+    {{ form_start(filter_form, {'style': 'inline'}) }}
+    <div class="show-grid">
+        {{ form_row(filter_form.searchString) }}
+        {{ form_row(filter_form.isRegex) }}
+        {{ form_row(filter_form.file) }}
+    </div>
+    <div>
+        <div class="form-group">
+            <ul id="date-range-list" data-prototype="{{ form_widget(filter_form.datePeriods.vars.prototype)|e }}">
+                {% for datePeriod in filter_form.datePeriods %}
+                    <li>
+                        {{ form_errors(datePeriod) }}
+                        {{ form_label(datePeriod) }}
+                        {{ form_widget(datePeriod) }}
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
-    </nav>
-
+    </div>
+    <div class="show-grid">
+        {{ form_widget(filter_form.submit, {'label': 'Search'}) }}
+    </div>
+    {{ form_end(filter_form) }}
 
     <table class="table records_list">
         <thead>
         <tr>
-            <th>{{ knp_pagination_sortable(pagination, 'Created At', 'l.createdAt') }}<span class="glyphicon glyphicon-sort"></span></th>
+            <th>{{ knp_pagination_sortable(pagination, 'Created At', 'l.createdAt') }}<span
+                        class="glyphicon glyphicon-sort"></span></th>
             <th>Content</th>
         </tr>
         </thead>
@@ -40,4 +67,34 @@
     <div class="navigation">
         {{ knp_pagination_render(pagination, "", {}, { "prev_label": "Previous", "next_label": "Next", "first_label": "First", "last_label": "Last"}) }}
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        var $collectionHolder,
+                $addLink = $('<a href="#" class="add_range">Add Date Range</a>'),
+                $newLinkLi = $('<li></li>').append($addLink);
+
+        jQuery(document).ready(function () {
+            $collectionHolder = $('#date-range-list');
+            $collectionHolder.append($newLinkLi);
+            $collectionHolder.data('index', $collectionHolder.find(':input').length);
+            $addLink.on('click', function (e) {
+                e.preventDefault();
+                addForm($collectionHolder, $newLinkLi);
+            });
+        });
+
+        function addForm($collectionHolder, $newLinkLi) {
+            var prototype = $collectionHolder.data('prototype'),
+                    index = $collectionHolder.data('index'),
+                    newForm = prototype.replace(/__name__/g, index),
+                    $newFormLi;
+
+            $collectionHolder.data('index', index + 1);
+
+            $newFormLi = $('<li></li>').append(newForm);
+            $newLinkLi.before($newFormLi);
+        }
+    </script>
 {% endblock %}

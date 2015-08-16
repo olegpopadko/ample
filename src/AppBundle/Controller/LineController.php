@@ -3,6 +3,9 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\LineRepository;
+use AppBundle\Form\Data\DateRange;
+use AppBundle\Form\Data\LineFilter;
+use AppBundle\Form\LineType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -25,7 +28,7 @@ class LineController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function indexAction(ddRequest $request)
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -45,7 +48,30 @@ class LineController extends Controller
         );
 
         return [
-            'pagination'    => $pagination,
+            'filter_form' => $this->createFilterForm($this->getLineFilter())->createView(),
+            'pagination'  => $pagination,
         ];
+    }
+
+    /**
+     * @return $this
+     */
+    private function getLineFilter()
+    {
+        $dateRange = new DateRange();
+        $dateRange->setStartDate((new \DateTime())->modify('-10 days'))
+            ->setEndDate(new \DateTime());
+        return (new LineFilter())->addDatePeriod($dateRange);
+    }
+
+    /**
+     * @return \Symfony\Component\Form\Form
+     */
+    private function createFilterForm($lineFilter)
+    {
+        return $this->createForm(new LineType(), $lineFilter, [
+            'method' => 'GET',
+        ])
+            ->add('submit', 'submit');
     }
 }
