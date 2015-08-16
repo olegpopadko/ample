@@ -8,15 +8,6 @@
 namespace AppBundle\LogFile;
 
 /**
- * Class InvalidLineFormatException
- * @package AppBundle\LogFile
- */
-class InvalidLineFormatException extends \Exception
-{
-
-}
-
-/**
  * Class Line
  * @package AppBundle\LogFile
  */

@@ -1,4 +1,4 @@
-§<?php
+<?php
 /**
  * Created by Oleg Popadko
  * Date: 8/16/15
