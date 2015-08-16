@@ -4,14 +4,25 @@
 
 {% block stylesheets %}
     <style>
-        .show-grid, #date-range-list li {
+        .show-grid {
             margin-bottom: 15px;
+        }
+
+        #date-range-list li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
         }
 
         #date-range-list {
             padding-left: 0px;
             list-style-type: none;
         }
+
+        .per_page {
+            width: 70px;
+        }
+
     </style>
 {% endblock %}
 
@@ -22,7 +33,7 @@
         {{ label_info('Count: ' ~ pagination.getTotalItemCount ) }}
     </div>
 
-    <div class="show-grid">
+    <div class="show-grid per_page">
         {{ per_page_form() }}
     </div>
 
@@ -81,8 +92,11 @@
 
         jQuery(document).ready(function () {
             $collectionHolder = $('#date-range-list');
-            $collectionHolder.append($newLinkLi);
             $collectionHolder.data('index', $collectionHolder.find(':input').length);
+            $collectionHolder.find('li').each(function () {
+                addTagFormDeleteLink($(this));
+            });
+            $collectionHolder.append($newLinkLi);
             $addLink.on('click', function (e) {
                 e.preventDefault();
                 addForm($collectionHolder, $newLinkLi);
@@ -99,6 +113,16 @@
 
             $newFormLi = $('<li></li>').append(newForm);
             $newLinkLi.before($newFormLi);
+        }
+
+        function addTagFormDeleteLink($tagFormLi) {
+            var $removeFormA = $('<a href="#" style="display: inline"><span class="glyphicon glyphicon-remove"></span></a>');
+            $tagFormLi.append($removeFormA);
+
+            $removeFormA.on('click', function (e) {
+                e.preventDefault();
+                $tagFormLi.remove();
+            });
         }
     </script>
 {% endblock %}
