@@ -43,73 +43,11 @@ class LineController extends Controller
         $pagination = $paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
-            $this->getPerPage($request->getSession())
+            $this->get('app.per_page_service')->getPerPage()
         );
 
         return [
-            'per_page_form' => $this->createPerPageForm($fileId, $request->getSession())->createView(),
             'pagination'    => $pagination,
         ];
-    }
-
-    /**
-     * Set per page value.
-     *
-     * @Route("/{fileId}/update_lines_per_page", name="update_lines_per_page")
-     * @Method("GET")
-     * @Template()
-     */
-    public function updatePerPageAction($fileId, Request $request)
-    {
-        $form = $this->createPerPageForm($fileId, $request->getSession());
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $request->getSession()->set($this->getPerPageKey(), $form->get('perPage')->getData());
-        }
-
-        return $this->redirect($this->generateUrl('line', ['fileId' => $fileId]));
-    }
-
-    /**
-     * @param SessionInterface $session
-     * @return mixed
-     */
-    private function getPerPage(SessionInterface $session)
-    {
-        return $session->get($this->getPerPageKey(), 10);
-    }
-
-    /**
-     * @return string
-     */
-    private function getPerPageKey()
-    {
-        return 'file_lines_per_page';
-    }
-
-    /**
-     * @param $fileId
-     * @param SessionInterface $session
-     * @return \Symfony\Component\Form\Form
-     */
-    private function createPerPageForm($fileId, SessionInterface $session)
-    {
-        $form = $this->createFormBuilder()
-            ->setAction($this->generateUrl('update_lines_per_page', ['fileId' => $fileId]))
-            ->setMethod('GET')
-            ->add('perPage', 'choice', [
-                'choices' => [
-                    10  => 10,
-                    25  => 25,
-                    50  => 50,
-                    100 => 100,
-                ],
-            ])
-            ->getForm();
-
-        $form->get('perPage')->setData($this->getPerPage($session));
-
-        return $form;
     }
 }

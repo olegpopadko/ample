@@ -4,8 +4,24 @@
 #    parameter_name: value
 
 services:
-    app_bundle.file_entity_factory:
+    app.file_entity_factory:
         class: AppBundle\Factory\FileEntityFactory
 
-    app_bundle.line_entity_factory:
+    app.line_entity_factory:
         class: AppBundle\Factory\LineEntityFactory
+
+    app.per_page_service:
+        class: AppBundle\Service\PerPage
+        arguments:
+            - @session
+            - @form.factory
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
+    app.twig_per_page_extension:
+        class: AppBundle\Twig\PerPageExtension
+        arguments:
+            - @app.per_page_service
+        public: false
+        tags:
+            - { name: twig.extension }

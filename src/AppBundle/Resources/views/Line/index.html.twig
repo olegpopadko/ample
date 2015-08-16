@@ -15,10 +15,7 @@
         </div>
 
         <div class="collapse navbar-collapse navbar-search-collapse">
-            {{ form_start(per_page_form, { 'style': 'navbar-form navbar-right' }) }}
-            {{ form_label(per_page_form.perPage) }}
-            {{ form_widget(per_page_form.perPage, {'attr': {'onchange': 'this.form.submit()'}}) }}
-            {{ form_end(per_page_form) }}
+            {{ per_page_form() }}
         </div>
     </nav>
 
