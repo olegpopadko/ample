@@ -18,6 +18,10 @@
 {% block body -%}
     <h1>Line list</h1>
 
+    <div class="count show-grid">
+        {{ label_info('Count: ' ~ pagination.getTotalItemCount ) }}
+    </div>
+
     <div class="show-grid">
         {{ per_page_form() }}
     </div>

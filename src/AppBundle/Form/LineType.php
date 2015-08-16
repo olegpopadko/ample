@@ -15,14 +15,16 @@ class LineType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('searchString', 'text')
+            ->add('searchString', 'text', [
+                'required' => false,
+            ])
             ->add('regex', 'checkbox', [
                 'required' => false,
-                'label' => 'Is regex',
+                'label'    => 'Is regex',
             ])
             ->add('file', 'entity', [
-                'class' => 'AppBundle:File',
-                'required' => false,
+                'class'       => 'AppBundle:File',
+                'required'    => false,
                 'placeholder' => 'All files'
             ])
             ->add('datePeriods', 'collection', [

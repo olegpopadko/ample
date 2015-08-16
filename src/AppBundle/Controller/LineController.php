@@ -3,9 +3,9 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\LineRepository;
-use AppBundle\Form\Data\DateRange;
 use AppBundle\Form\Data\LineFilter;
 use AppBundle\Form\LineType;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -30,38 +30,67 @@ class LineController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        /** @var LineRepository $repository */
-        $repository = $em->getRepository('AppBundle:Line');
-
-        $query = $repository->createQueryBuilder('l')
-            ->orderBy('l.createdAt', 'desc')
-            ->getQuery();
+        list($queryBuilder, $lineFilter) = $this->createQueryBuilder($request);
 
         /** @var \Knp\Component\Pager\Paginator $paginator */
         $paginator  = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-            $query,
+            $queryBuilder,
             $request->query->getInt('page', 1),
             $this->get('app.per_page_service')->getPerPage()
         );
 
         return [
-            'filter_form' => $this->createFilterForm($this->getLineFilter())->createView(),
+            'filter_form' => $this->createFilterForm($lineFilter)->createView(),
             'pagination'  => $pagination,
         ];
     }
 
     /**
-     * @return $this
+     * @param $request
+     * @return array
      */
-    private function getLineFilter()
+    private function createQueryBuilder($request)
     {
-        $dateRange = new DateRange();
-        $dateRange->setStartDate((new \DateTime())->modify('-10 days'))
-            ->setEndDate(new \DateTime());
-        return (new LineFilter())->addDatePeriod($dateRange);
+        $lineFilter = $this->getLineFilter($request);
+
+        $tableAlias = 'l';
+
+        $queryBuilder = $this->getLineRepository()->createQueryBuilder($tableAlias)
+            ->orderBy('l.createdAt', 'desc');
+
+        $this->get('app.apply_line_filter_factory')
+            ->create($queryBuilder, $tableAlias, $lineFilter)
+            ->modify();
+
+        return [$queryBuilder, $lineFilter];
+    }
+
+    /**
+     * @return LineRepository
+     */
+    private function getLineRepository()
+    {
+        return $this->getDoctrine()->getManager()->getRepository('AppBundle:Line');
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param Request $request
+     * @return LineFilter
+     */
+    private function getLineFilter(Request $request)
+    {
+        $lineFilter = new LineFilter();
+
+        $form = $this->createFilterForm($lineFilter);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            return $lineFilter;
+        } else {
+            return new LineFilter();
+        }
+
     }
 
     /**

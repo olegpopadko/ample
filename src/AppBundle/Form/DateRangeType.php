@@ -14,9 +14,15 @@ class DateRangeType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $yearsRange = range(date('Y') - 30, date('Y'));
+
         $builder
-            ->add('startDate', 'date')
-            ->add('endDate', 'date');
+            ->add('startDate', 'date', [
+                'years' => $yearsRange,
+            ])
+            ->add('endDate', 'date', [
+                'years' => $yearsRange,
+            ]);
     }
 
     /**

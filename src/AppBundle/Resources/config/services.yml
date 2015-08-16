@@ -25,3 +25,6 @@ services:
         public: false
         tags:
             - { name: twig.extension }
+
+    app.apply_line_filter_factory:
+        class: AppBundle\Filter\ApplyLineFilterFactory
