@@ -2,17 +2,17 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\LineRepository;
-use AppBundle\Form\Data\LineFilter;
-use AppBundle\Form\LineType;
-use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\QueryBuilder;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use AppBundle\Entity\LineRepository;
+use AppBundle\Form\Data\LineFilter;
+use AppBundle\Form\LineType;
 
 /**
  * Line controller.
