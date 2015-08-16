@@ -21,11 +21,11 @@ class LineController extends Controller
     /**
      * Lists all Line entities.
      *
-     * @Route("/{fileId}", name="line")
+     * @Route("/", name="line")
      * @Method("GET")
      * @Template()
      */
-    public function indexAction($fileId, Request $request)
+    public function indexAction(ddRequest $request)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -33,8 +33,6 @@ class LineController extends Controller
         $repository = $em->getRepository('AppBundle:Line');
 
         $query = $repository->createQueryBuilder('l')
-            ->where('l.file = :file')
-            ->setParameter('file', $em->getReference('AppBundle:File', $fileId))
             ->orderBy('l.createdAt', 'desc')
             ->getQuery();
 
