@@ -30,9 +30,9 @@ class DateRangeType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => 'AppBundle\Form\Data\DateRange'
-        ));
+        ]);
     }
 
     /**
@@ -40,6 +40,6 @@ class DateRangeType extends AbstractType
      */
     public function getName()
     {
-        return 'appbundle_date_range';
+        return '';
     }
 }

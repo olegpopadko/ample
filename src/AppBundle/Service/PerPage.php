@@ -38,7 +38,7 @@ class PerPage
      */
     public function __construct(SessionInterface $session, FormFactory $formFactory)
     {
-        $this->session = $session;
+        $this->session     = $session;
         $this->formFactory = $formFactory;
     }
 
@@ -59,21 +59,13 @@ class PerPage
     }
 
     /**
-     * @return string
-     */
-    private function getFormName()
-    {
-        return 'per_page_form';
-    }
-
-    /**
      * @return Form
      */
     public function createPerPageForm()
     {
-        $form = $this->formFactory->createNamedBuilder($this->getFormName(), 'form', [
+        $form = $this->formFactory->createNamedBuilder('', 'form', [
             'perPage' => $this->getPerPage(),
-        ])
+        ], ['csrf_protection' => false])
             ->setMethod('GET')
             ->add($this->getFormFieldName(), 'choice', [
                 'choices' => $this->getPerPageValues(),

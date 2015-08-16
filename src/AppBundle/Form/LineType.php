@@ -39,9 +39,10 @@ class LineType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Form\Data\LineFilter'
-        ));
+        $resolver->setDefaults([
+            'csrf_protection' => false,
+            'data_class'      => 'AppBundle\Form\Data\LineFilter'
+        ]);
     }
 
     /**
@@ -49,6 +50,6 @@ class LineType extends AbstractType
      */
     public function getName()
     {
-        return 'appbundle_line';
+        return '';
     }
 }
