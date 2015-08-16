@@ -16,9 +16,14 @@ class LineType extends AbstractType
     {
         $builder
             ->add('searchString', 'text')
-            ->add('isRegex', 'checkbox')
+            ->add('regex', 'checkbox', [
+                'required' => false,
+                'label' => 'Is regex',
+            ])
             ->add('file', 'entity', [
-                'class' => 'AppBundle:File'
+                'class' => 'AppBundle:File',
+                'required' => false,
+                'placeholder' => 'All files'
             ])
             ->add('datePeriods', 'collection', [
                 'type'      => new DateRangeType(),

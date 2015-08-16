@@ -24,7 +24,7 @@ class LineFilter
     /**
      * @var bool
      */
-    private $isRegex;
+    private $regex;
 
     /**
      * @var File
@@ -66,18 +66,18 @@ class LineFilter
     /**
      * @return boolean
      */
-    public function isIsRegex()
+    public function isRegex()
     {
-        return $this->isRegex;
+        return $this->regex;
     }
 
     /**
      * @param $isRegex
      * @return $this
      */
-    public function setIsRegex($isRegex)
+    public function setRegex($isRegex)
     {
-        $this->isRegex = $isRegex;
+        $this->regex = $isRegex;
 
         return $this;
     }
