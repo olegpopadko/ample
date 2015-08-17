@@ -29,7 +29,6 @@ class SupervisorCommand extends EndlessContainerAwareCommand
     {
         parent::__construct($name);
         $this->setTimeout(5 * 60); //5 minutes
-        $this->setTimeout(1); //5 minutes
     }
 
     /**
