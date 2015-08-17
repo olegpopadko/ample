@@ -7,18 +7,18 @@
 
 namespace AppBundle\Command;
 
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use AppBundle\Entity\File;
 use AppBundle\Entity\Line;
 use AppBundle\Entity\LineRepository;
 use AppBundle\Entity\User;
 use AppBundle\Factory\FileEntityFactory;
 use AppBundle\Factory\LineEntityFactory;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\LockHandler;
 use AppBundle\LogFile;
+use Wrep\Daemonizable\Command\EndlessContainerAwareCommand;
 
 /**
  * ImportCommand
@@ -26,7 +26,7 @@ use AppBundle\LogFile;
  * @package    AppBundle
  * @subpackage Command
  */
-class ImportCommand extends AbstractEndlessCommand
+class ImportCommand extends EndlessContainerAwareCommand
 {
     /**
      * @var int

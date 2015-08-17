@@ -21,12 +21,12 @@
         "incenteev/composer-parameter-handler": "~2.0",
         "braincrafted/bootstrap-bundle": "^2.1",
         "twbs/bootstrap": "3.0.*",
-        "jquery/jquery":  "1.11.*",
+        "jquery/jquery": "1.11.*",
         "knplabs/knp-menu-bundle": "^2.0",
         "doctrine/doctrine-migrations-bundle": "^1.0",
         "knplabs/knp-paginator-bundle": "^2.4",
         "beberlei/DoctrineExtensions": "^1.0",
-        "wrep/daemonizable-command": "^1.2"
+        "wrep/daemonizable-command": "dev-master"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
@@ -43,6 +43,10 @@
                     "type": "file"
                 }
             }
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/olegpopadko/daemonizable-command"
         }
     ],
     "scripts": {
