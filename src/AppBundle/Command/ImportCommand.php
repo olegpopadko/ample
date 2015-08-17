@@ -97,11 +97,6 @@ class ImportCommand extends AbstractEndlessCommand
         $em->clear();
     }
 
-    private function init()
-    {
-
-    }
-
     /**
      * @param LogFile\Line $line
      * @return bool
@@ -112,14 +107,19 @@ class ImportCommand extends AbstractEndlessCommand
     {
         $lastLineEntity = $this->getLastLineEntity();
 
-        $createdAtSmaller = $lastLineEntity && $line->getCreatedAt() < $lastLineEntity->getCreatedAt();
-        $sameLines        = $lastLineEntity
-            && $line->getCreatedAt() == $lastLineEntity->getCreatedAt()
-            && $line->getContent() === $lastLineEntity->getContent()
-        ;
-        if ($line->isEmpty() || $createdAtSmaller || $sameLines) {
+        if ($line->isEmpty()) {
             return false;
         }
+
+        $createdAtSmaller = $lastLineEntity && $line->getCreatedAt() < $lastLineEntity->getCreatedAt();
+        $sameLines = $lastLineEntity
+            && $line->getCreatedAt() == $lastLineEntity->getCreatedAt()
+            && $line->getContent() === $lastLineEntity->getContent();
+
+        if ( $createdAtSmaller || $sameLines) {
+            return false;
+        }
+
         return true;
     }
 
