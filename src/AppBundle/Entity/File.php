@@ -41,7 +41,7 @@ class File
      */
     public function __toString()
     {
-        return $this->getName();
+        return $this->getUser() . '/' . $this->getName();
     }
 
     /**
@@ -93,7 +93,7 @@ class File
     /**
      * Get user
      *
-     * @return \AppBundle\Entity\User 
+     * @return \AppBundle\Entity\User
      */
     public function getUser()
     {
