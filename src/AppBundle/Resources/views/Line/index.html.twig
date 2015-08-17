@@ -5,7 +5,7 @@
 {% block stylesheets %}
     <style>
         .date-width {
-            min-width: 170px;
+            width: 170px;
         }
 
         .show-grid {
@@ -25,6 +25,14 @@
 
         .per_page {
             width: 70px;
+        }
+
+        .lines-table {
+            table-layout: fixed
+        }
+
+        .line-content {
+            word-break: break-all;
         }
 
     </style>
@@ -65,7 +73,7 @@
     </div>
     {{ form_end(filter_form) }}
 
-    <table class="table records_list">
+    <table class="table records_list lines-table">
         <thead>
         <tr>
             <th class="date-width">{{ knp_pagination_sortable(pagination, 'Created At', 'l.createdAt') }}<span
@@ -77,7 +85,7 @@
         {% for entity in pagination %}
             <tr>
                 <td>{% if entity.createdAt %}{{ entity.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{{ entity.content }}</td>
+                <td class="line-content">{{ entity.content }}</td>
             </tr>
         {% endfor %}
         </tbody>
