@@ -15,10 +15,11 @@ class LineRepository extends EntityRepository
     /**
      * @return Line
      */
-    public function findLast()
+    public function findLast(File $file)
     {
         return $this->createQueryBuilder('l')
-            ->select()
+            ->andWhere('l.file = :file')
+            ->setParameter('file', $file)
             ->orderBy('l.createdAt', 'desc')
             ->getQuery()
             ->setMaxResults(1)

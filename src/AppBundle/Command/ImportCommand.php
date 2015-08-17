@@ -10,6 +10,7 @@ namespace AppBundle\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\LockHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use AppBundle\Entity\File;
 use AppBundle\Entity\Line;
@@ -44,6 +45,11 @@ class ImportCommand extends EndlessContainerAwareCommand
     private $lastLineId;
 
     /**
+     * @var LockHandler
+     */
+    private $lockHandler;
+
+    /**
      * {@inheritDoc}
      */
     protected function configure()
@@ -53,6 +59,20 @@ class ImportCommand extends EndlessContainerAwareCommand
             ->setDescription('Import log file to DB')
             ->addArgument('user_id', InputArgument::REQUIRED, 'User Id')
             ->addArgument('filename', InputArgument::REQUIRED, 'Path to file');
+    }
+
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
+    protected function onStart(InputInterface $input, OutputInterface $output)
+    {
+        parent::onStart($input, $output);
+
+        $this->lockHandler = new LockHandler($input->getArgument('filename') . '.lock');
+        if (!$this->lockHandler->lock()) {
+            $this->shutdown();
+        }
     }
 
     /**
@@ -76,7 +96,7 @@ class ImportCommand extends EndlessContainerAwareCommand
 
         $this->initLastLineId();
 
-        $i = 0;
+        $i         = 0;
         $batchSize = 10000;
 
         $file->seek($this->linePosition);
@@ -111,7 +131,7 @@ class ImportCommand extends EndlessContainerAwareCommand
         }
 
         $createdAtSmaller = $lastLineEntity && $line->getCreatedAt() < $lastLineEntity->getCreatedAt();
-        $sameLines = $lastLineEntity
+        $sameLines        = $lastLineEntity
             && $line->getCreatedAt() == $lastLineEntity->getCreatedAt()
             && $line->getContent() === $lastLineEntity->getContent();
 
@@ -179,7 +199,7 @@ class ImportCommand extends EndlessContainerAwareCommand
         /** @var LineRepository $repository */
         $repository = $this->getManager()->getRepository('AppBundle:Line');
 
-        if ($line = $repository->findLast()) {
+        if ($line = $repository->findLast($this->getFileEntity())) {
             $this->lastLineId = $line->getId();
         }
     }
