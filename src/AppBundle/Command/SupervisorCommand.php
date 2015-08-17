@@ -107,6 +107,6 @@ class SupervisorCommand extends EndlessContainerAwareCommand
     private function getUserNameFromPath($path)
     {
         $folders = explode('/', $path);
-        return $folders[1];
+        return $folders[2];
     }
 }
