@@ -13,14 +13,6 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-//        $file      = "/home/vagrant/logs/NASA_access_log_Jul95.log";
-//        $file = new \SplFileObject($file);
-//        $file->seek(9);
-//        echo $file->current();
-//        exit;
-        // replace this example code with whatever you need
-        return $this->render('AppBundle:default:index.html.twig', array(
-            'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),
-        ));
+        return $this->redirect($this->generateUrl('line'));
     }
 }
