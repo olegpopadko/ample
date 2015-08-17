@@ -6,6 +6,8 @@
 services:
     app.file_entity_factory:
         class: AppBundle\Factory\FileEntityFactory
+        arguments:
+            - @doctrine.orm.entity_manager
 
     app.line_entity_factory:
         class: AppBundle\Factory\LineEntityFactory

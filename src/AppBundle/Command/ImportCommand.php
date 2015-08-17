@@ -9,11 +9,15 @@ namespace AppBundle\Command;
 
 use AppBundle\Entity\File;
 use AppBundle\Entity\Line;
+use AppBundle\Entity\LineRepository;
+use AppBundle\Entity\User;
+use AppBundle\Factory\FileEntityFactory;
+use AppBundle\Factory\LineEntityFactory;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\LockHandler;
 use AppBundle\LogFile;
 
 /**
@@ -22,16 +26,32 @@ use AppBundle\LogFile;
  * @package    AppBundle
  * @subpackage Command
  */
-class ImportCommand extends ContainerAwareCommand
+class ImportCommand extends AbstractEndlessCommand
 {
+    /**
+     * @var int
+     */
+    private $linePosition = 0;
+
+    /**
+     * @var int
+     */
+    private $fileId;
+
+    /**
+     * @var int
+     */
+    private $lastLineId;
+
     /**
      * {@inheritDoc}
      */
     protected function configure()
     {
         $this
-            ->setName('file:import')
+            ->setName('import:run')
             ->setDescription('Import log file to DB')
+            ->addArgument('user_id', InputArgument::REQUIRED, 'User Id')
             ->addArgument('filename', InputArgument::REQUIRED, 'Path to file');
     }
 
@@ -40,29 +60,138 @@ class ImportCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $file = new \SplFileObject($input->getArgument('filename'));
+        $filename = $input->getArgument('filename');
 
-        $fileEntityFactory = $this->getContainer()->get('app_bundle.file_entity_factory');
-        $lineEntityFactory = $this->getContainer()->get('app_bundle.line_entity_factory');
+        clearstatcache();
+        $file = new \SplFileObject($filename);
 
-        $fileEntity = $fileEntityFactory->createFromFilename($file);
+        /** @var LineEntityFactory $lineEntityFactory */
+        $lineEntityFactory = $this->getContainer()->get('app.line_entity_factory');
 
-        /** @var EntityManagerInterface $em */
-        $em = $this->getContainer()->get('doctrine')->getManager();
+        $em = $this->getManager();
+
+        $fileEntity = $this->findOrCreateFileEntity($filename, $input->getArgument('user_id'));
+
+        $this->setFileId($fileEntity->getId());
+
+        $this->initLastLineId();
+
+        $i         = 0;
+        $batchSize = 10000;
+
+        $file->seek($this->linePosition);
+        foreach ($file as $line) {
+            $line = new LogFile\Line($line);
+            if (!$this->isLineAccepted($line)) {
+                continue;
+            }
+            $em->persist($lineEntityFactory->createFromLine($line, $this->getFileEntity()));
+            $i++;
+            if ($i % $batchSize === 0) {
+                $em->flush();
+                $em->clear();
+            }
+        }
+        $this->linePosition = $file->key();
+        $em->flush();
+        $em->clear();
+    }
+
+    private function init()
+    {
+
+    }
+
+    /**
+     * @param LogFile\Line $line
+     * @return bool
+     * @throws LogFile\EmptyLineException
+     * @throws LogFile\InvalidLineFormatException
+     */
+    private function isLineAccepted(LogFile\Line $line)
+    {
+        $lastLineEntity = $this->getLastLineEntity();
+
+        $createdAtSmaller = $lastLineEntity && $line->getCreatedAt() < $lastLineEntity->getCreatedAt();
+        $sameLines        = $lastLineEntity
+            && $line->getCreatedAt() == $lastLineEntity->getCreatedAt()
+            && $line->getContent() === $lastLineEntity->getContent()
+        ;
+        if ($line->isEmpty() || $createdAtSmaller || $sameLines) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * @param $fileId
+     */
+    private function setFileId($fileId)
+    {
+        $this->fileId = $fileId;
+    }
+
+    /**
+     * @return File
+     */
+    private function getFileEntity()
+    {
+        if ($this->fileId) {
+            return $this->getManager()->getReference('AppBundle:File', $this->fileId);
+        }
+    }
+
+    /**
+     * @return EntityManagerInterface
+     */
+    private function getManager()
+    {
+        return $this->getContainer()->get('doctrine')->getManager();
+    }
+
+    /**
+     * @param $filename
+     * @param $userId
+     * @return \AppBundle\Entity\File|object
+     */
+    private function findOrCreateFileEntity($filename, $userId)
+    {
+        $em = $this->getManager();
+
+        /** @var User $user */
+        $user = $em->getReference('AppBundle:User', $userId);
+
+        /** @var FileEntityFactory $fileEntityFactory */
+        $fileEntityFactory = $this->getContainer()->get('app.file_entity_factory');
+
+        $fileEntity = $fileEntityFactory->findOrCreate($filename, $user);
 
         $em->persist($fileEntity);
         $em->flush();
 
-        $i = 0;
-        $batchSize = 10000;
+        return $fileEntity;
+    }
 
-        foreach ($file as $line) {
-            $em->persist($lineEntityFactory->createFromLine(new LogFile\Line($line), $fileEntity));
-            $i++;
-            if ($i % $batchSize === 0) {
-                $em->flush();
-            }
+    /**
+     * @return int
+     */
+    private function initLastLineId()
+    {
+        /** @var LineRepository $repository */
+        $repository = $this->getManager()->getRepository('AppBundle:Line');
+
+        if ($line = $repository->findLast()) {
+            $this->lastLineId = $line->getId();
         }
-        $em->flush();
+    }
+
+    /**
+     * @return Line
+     */
+    private function getLastLineEntity()
+    {
+        if ($this->lastLineId) {
+            return $this->getManager()->getReference('AppBundle:Line', $this->lastLineId);
+        }
     }
 }

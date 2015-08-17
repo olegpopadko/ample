@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b8a8db91c65fc3aec0a985afb4f39461",
+    "hash": "0af78dae27c95dc38f6f192c08567c71",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -2110,6 +2110,52 @@
                 "templating"
             ],
             "time": "2015-07-31 13:45:26"
+        },
+        {
+            "name": "wrep/daemonizable-command",
+            "version": "1.2.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mac-cain13/daemonizable-command.git",
+                "reference": "325937efec2a0858bc00d7d38d8cb7c46cb6fe7d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mac-cain13/daemonizable-command/zipball/325937efec2a0858bc00d7d38d8cb7c46cb6fe7d",
+                "reference": "325937efec2a0858bc00d7d38d8cb7c46cb6fe7d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "symfony/console": "2.*",
+                "symfony/dependency-injection": "2.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Wrep\\Daemonizable\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mathijs Kadijk",
+                    "email": "mathijs@wrep.nl"
+                }
+            ],
+            "description": "Daemonizable (endless running) commands for Symfony2.",
+            "homepage": "https://github.com/mac-cain13/daemonizable-command",
+            "keywords": [
+                "Symfony2",
+                "background process",
+                "backgrounding",
+                "daemon",
+                "long running process"
+            ],
+            "time": "2015-01-14 20:15:47"
         }
     ],
     "packages-dev": [

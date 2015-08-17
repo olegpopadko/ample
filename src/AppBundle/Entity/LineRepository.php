@@ -12,4 +12,17 @@ use Doctrine\ORM\EntityRepository;
  */
 class LineRepository extends EntityRepository
 {
+    /**
+     * @return Line
+     */
+    public function findLast()
+    {
+        return $this->createQueryBuilder('l')
+            ->select()
+            ->orderBy('l.createdAt', 'desc')
+            ->getQuery()
+            ->setMaxResults(1)
+            ->getOneOrNullResult();
+    }
+
 }

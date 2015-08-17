@@ -9,7 +9,6 @@ namespace AppBundle\LogFile;
 
 /**
  * Class Line
- * @package AppBundle\LogFile
  */
 class Line
 {
@@ -23,7 +22,15 @@ class Line
      */
     public function __construct($line)
     {
-        $this->line = $line;
+        $this->line = trim($line);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return empty($this->line);
     }
 
     /**
@@ -40,11 +47,14 @@ class Line
      */
     public function getCreatedAt()
     {
+        if ($this->isEmpty()) {
+            throw new EmptyLineException();
+        }
         $matches = [];
         preg_match('/\[(.*)\]/', $this->line, $matches);
         if (empty($matches[1])) {
             throw new InvalidLineFormatException();
         }
-        return new \DateTime($matches[1]);
+        return (new \DateTime($matches[1]))->setTimezone(new \DateTimeZone('UTC'));
     }
 }
