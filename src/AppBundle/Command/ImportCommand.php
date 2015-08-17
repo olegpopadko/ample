@@ -100,7 +100,6 @@ class ImportCommand extends AbstractEndlessCommand
     /**
      * @param LogFile\Line $line
      * @return bool
-     * @throws LogFile\EmptyLineException
      * @throws LogFile\InvalidLineFormatException
      */
     private function isLineAccepted(LogFile\Line $line)

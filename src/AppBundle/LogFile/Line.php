@@ -48,7 +48,7 @@ class Line
     public function getCreatedAt()
     {
         if ($this->isEmpty()) {
-            throw new EmptyLineException();
+            return null;
         }
         $matches = [];
         preg_match('/\[(.*)\]/', $this->line, $matches);
