@@ -4,6 +4,10 @@
 
 {% block stylesheets %}
     <style>
+        .date-width {
+            min-width: 170px;
+        }
+
         .show-grid {
             margin-bottom: 15px;
         }
@@ -64,7 +68,7 @@
     <table class="table records_list">
         <thead>
         <tr>
-            <th>{{ knp_pagination_sortable(pagination, 'Created At', 'l.createdAt') }}<span
+            <th class="date-width">{{ knp_pagination_sortable(pagination, 'Created At', 'l.createdAt') }}<span
                         class="glyphicon glyphicon-sort"></span></th>
             <th>Content</th>
         </tr>
