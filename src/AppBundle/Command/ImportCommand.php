@@ -76,7 +76,7 @@ class ImportCommand extends AbstractEndlessCommand
 
         $this->initLastLineId();
 
-        $i         = 0;
+        $i = 0;
         $batchSize = 10000;
 
         $file->seek($this->linePosition);
@@ -116,7 +116,7 @@ class ImportCommand extends AbstractEndlessCommand
             && $line->getCreatedAt() == $lastLineEntity->getCreatedAt()
             && $line->getContent() === $lastLineEntity->getContent();
 
-        if ( $createdAtSmaller || $sameLines) {
+        if ($createdAtSmaller || $sameLines) {
             return false;
         }
 
