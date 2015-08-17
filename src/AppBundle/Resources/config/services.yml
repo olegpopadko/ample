@@ -30,3 +30,6 @@ services:
 
     app.apply_line_filter_factory:
         class: AppBundle\Filter\ApplyLineFilterFactory
+
+    app.import_lock_factory:
+        class: AppBundle\Service\ImportLockFactory

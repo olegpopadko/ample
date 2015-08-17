@@ -2117,12 +2117,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/olegpopadko/daemonizable-command.git",
-                "reference": "e96ccb223c202f79ae5b1ac08a0308b5ea578057"
+                "reference": "1fbf3561a375bcbdf9b3b2dc98c30d204a834284"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/olegpopadko/daemonizable-command/zipball/e96ccb223c202f79ae5b1ac08a0308b5ea578057",
-                "reference": "e96ccb223c202f79ae5b1ac08a0308b5ea578057",
+                "url": "https://api.github.com/repos/olegpopadko/daemonizable-command/zipball/1fbf3561a375bcbdf9b3b2dc98c30d204a834284",
+                "reference": "1fbf3561a375bcbdf9b3b2dc98c30d204a834284",
                 "shasum": ""
             },
             "require": {
@@ -2158,7 +2158,7 @@
                 "issues": "https://github.com/mac-cain13/daemonizable-command/issues",
                 "source": "https://github.com/olegpopadko/daemonizable-command/tree/master"
             },
-            "time": "2015-08-17 13:38:35"
+            "time": "2015-08-17 21:19:03"
         }
     ],
     "packages-dev": [

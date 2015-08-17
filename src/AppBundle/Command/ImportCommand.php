@@ -65,9 +65,9 @@ class ImportCommand extends EndlessContainerAwareCommand
      * @param InputInterface $input
      * @param OutputInterface $output
      */
-    protected function onStart(InputInterface $input, OutputInterface $output)
+    protected function starting(InputInterface $input, OutputInterface $output)
     {
-        parent::onStart($input, $output);
+        parent::starting($input, $output);
 
         $this->lockHandler = new LockHandler($input->getArgument('filename') . '.lock');
         if (!$this->lockHandler->lock()) {
