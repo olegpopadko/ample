@@ -30,7 +30,7 @@ class Line
      */
     public function isEmpty()
     {
-        return empty($this->line) || $this->getCreatedAt();
+        return empty($this->line) || is_null($this->getCreatedAt());
     }
 
     /**
