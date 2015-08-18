@@ -55,6 +55,10 @@ class Line
         if (empty($matches[1])) {
             throw new InvalidLineFormatException();
         }
-        return (new \DateTime($matches[1]))->setTimezone(new \DateTimeZone('UTC'));
+        try {
+            return (new \DateTime($matches[1]))->setTimezone(new \DateTimeZone('UTC'));
+        } catch (\Exception $e) {
+
+        }
     }
 }
