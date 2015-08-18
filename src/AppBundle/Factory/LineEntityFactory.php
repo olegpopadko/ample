@@ -21,7 +21,6 @@ class LineEntityFactory
      * @param LogFile\Line $line
      * @param File $file
      * @return Line
-     * @throws LogFile\InvalidLineFormatException
      */
     public function createFromLine(LogFile\Line $line, File $file)
     {

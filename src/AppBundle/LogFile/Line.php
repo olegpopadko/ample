@@ -43,20 +43,18 @@ class Line
 
     /**
      * @return \DateTime
-     * @throws InvalidLineFormatException
      */
     public function getCreatedAt()
     {
         if ($this->isEmpty()) {
             return null;
         }
-        $matches = [];
-        preg_match('/\[(.*)\]/', $this->line, $matches);
-        if (empty($matches[1])) {
-            throw new InvalidLineFormatException();
-        }
         try {
-            return (new \DateTime($matches[1]))->setTimezone(new \DateTimeZone('UTC'));
+            $matches = [];
+            preg_match('/\[(.*)\]/', $this->line, $matches);
+            if (!empty($matches[1])) {
+                return (new \DateTime($matches[1]))->setTimezone(new \DateTimeZone('UTC'));
+            }
         } catch (\Exception $e) {
 
         }

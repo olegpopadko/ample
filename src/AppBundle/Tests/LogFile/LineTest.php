@@ -15,12 +15,9 @@ class LineTest extends KernelTestCase
         $this->assertEquals(new \DateTime('01/Jul/1995:00:00:01 -0400'), $logLine->getCreatedAt());
     }
 
-    /**
-     * @expectedException \AppBundle\LogFile\InvalidLineFormatException
-     */
     public function testGetCreatedAtException()
     {
         $line = 'string';
-        (new LogFile\Line($line))->getCreatedAt();
+        $this->assertNull((new LogFile\Line($line))->getCreatedAt());
     }
 }

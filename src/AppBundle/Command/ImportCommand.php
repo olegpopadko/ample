@@ -120,7 +120,6 @@ class ImportCommand extends EndlessContainerAwareCommand
     /**
      * @param LogFile\Line $line
      * @return bool
-     * @throws LogFile\InvalidLineFormatException
      */
     private function isLineAccepted(LogFile\Line $line)
     {
