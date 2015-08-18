@@ -124,10 +124,10 @@ class ApplyLineFilter implements FilterApplyInterface
     {
         if (!$this->lineFilter->getDatePeriods()->isEmpty()) {
             $wheres = [];
+            /** @var DateRange $dateRange */
             foreach ($this->lineFilter->getDatePeriods() as $key => $dateRange) {
                 $startDateKey = 'startDate' . $key;
                 $endDateKey   = 'endDate' . $key;
-                /** @var DateRange $dateRange */
                 $this->queryBuilder->setParameter($startDateKey, $dateRange->getStartDate());
                 $this->queryBuilder->setParameter($endDateKey, $dateRange->getEndDate());
                 $wheres[] = $this->queryBuilder->expr()
