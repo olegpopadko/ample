@@ -82,7 +82,7 @@ class DefaultController extends Controller
         $lineFilter = new LineFilter();
 
         $form = $this->createFilterForm($lineFilter);
-        $form->handleRequest($request);
+        $form->submit(array_intersect_key($request->query->all(), $form->all()));
         if ($form->isValid()) {
             return $lineFilter;
         } else {
