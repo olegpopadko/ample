@@ -100,8 +100,8 @@ class ImportCommand extends EndlessContainerAwareCommand
         $batchSize = 10000;
 
         $file->seek($this->linePosition);
-        foreach ($file as $line) {
-            $line = new LogFile\Line($line);
+        while (!$file->eof()) {
+            $line = new LogFile\Line($file->fgets());
             if (!$this->isLineAccepted($line)) {
                 continue;
             }
