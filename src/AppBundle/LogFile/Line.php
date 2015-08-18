@@ -30,7 +30,7 @@ class Line
      */
     public function isEmpty()
     {
-        return empty($this->line);
+        return empty($this->line) || $this->getCreatedAt();
     }
 
     /**
@@ -46,9 +46,6 @@ class Line
      */
     public function getCreatedAt()
     {
-        if ($this->isEmpty()) {
-            return null;
-        }
         try {
             $matches = [];
             preg_match('/\[(.*)\]/', $this->line, $matches);
